@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\DB;
 
 class Person extends Model
 {
@@ -39,4 +40,60 @@ class Person extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+
+    public function getDegreeWith($target_id)
+    {
+        if ($this->id == $target_id) {
+            return 0;
+        }
+
+        $max_depth = 25;
+
+        // Charger toutes les relations bidirectionnelles en une seule requête
+        $rows = DB::select("
+            SELECT parent_id, child_id FROM relationships
+        ");
+
+        // Construire le graphe
+        $graph = [];
+
+        foreach ($rows as $row) {
+            $graph[$row->parent_id][] = $row->child_id;
+            $graph[$row->child_id][] = $row->parent_id;
+        }
+
+        // Initialisation de la file (BFS)
+        $queue = [[$this->id, 0]];
+        $visited = [];
+
+        while (!empty($queue)) {
+            [$current, $depth] = array_shift($queue);
+
+            if ($depth > $max_depth) {
+                return false;
+            }
+
+            if (isset($visited[$current])) {
+                continue;
+            }
+
+            $visited[$current] = true;
+
+            if (!isset($graph[$current])) {
+                continue;
+            }
+
+            foreach ($graph[$current] as $related_id) {
+                if ($related_id == $target_id) {
+                    return $depth + 1;
+                }
+
+                $queue[] = [$related_id, $depth + 1];
+            }
+        }
+
+        return false;
+    }
+
 }
