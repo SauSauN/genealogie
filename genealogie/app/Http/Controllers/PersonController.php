@@ -43,6 +43,33 @@ class PersonController extends Controller
         // Ajoute l'utilisateur connecté comme créateur
         $validated['created_by'] = Auth::id();
 
+        // first_name : Majuscule 1ère lettre
+        $validated['first_name'] = ucfirst(strtolower($validated['first_name']));
+
+        // last_name : Majuscules
+        $validated['last_name'] = strtoupper($validated['last_name']);
+
+        // middle_names : majuscule pour chaque prénom
+        if (!empty($validated['middle_names'])) {
+            $validated['middle_names'] = collect(explode(',', $validated['middle_names']))
+                ->map(function ($name) {
+                    return ucfirst(strtolower(trim($name)));
+                })->implode(', ');
+        } else {
+            $validated['middle_names'] = null;
+        }
+
+        // birth_name : majuscules ou copie de last_name
+        $validated['birth_name'] = !empty($validated['birth_name'])
+            ? strtoupper($validated['birth_name'])
+            : $validated['last_name'];
+
+        // date_of_birth : null si vide
+        if (empty($validated['date_of_birth'])) {
+            $validated['date_of_birth'] = null;
+        }
+
+        // Enregistrement
         Person::create($validated);
 
         return redirect()->route('people.index')->with('success', 'Personne créée avec succès !');
