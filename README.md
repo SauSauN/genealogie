@@ -24,11 +24,11 @@ Le schéma de la base de données a été conçu pour gérer :
 - Les votes sur ces propositions
 
 **Visualiser le schéma ici :**  
-[📌 dbdiagram.io — Modèle de données](https://dbdiagram.io/d/6802d2321ca52373f588da12)
+[dbdiagram.io — Modèle de données](https://dbdiagram.io/d/6802d2321ca52373f588da12)
 
 ---
 
-## 🧬 Tables principales
+## Tables principales
 
 ### `users`
 
@@ -87,7 +87,7 @@ Les votes sont stockés dans `proposal_votes`.
 
 ---
 
-## 💻 Technologies utilisées
+## Technologies utilisées
 
 - Laravel 10
 - MySQL
