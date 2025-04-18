@@ -2,7 +2,6 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-
     <div class="bg-white shadow-md rounded-lg p-6">
         <h1 class="text-2xl font-bold mb-6">Liste des personnes</h1>
 
@@ -17,7 +16,6 @@
                 class="inline-block bg-indigo-600 hover:bg-indigo-700 text-black font-semibold px-4 py-2 rounded shadow">
                 ➕ Ajouter une personne
             </a>
-
         </div>
 
         <div class="overflow-x-auto">
@@ -32,25 +30,19 @@
                 <tbody class="divide-y divide-gray-200">
                     @foreach($people as $person)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4">{{ $person->first_name }} {{ $person->last_name }}</td>
+                            <td class="px-6 py-4 font-medium">
+                                {{ $person->first_name }} {{ $person->last_name }}
+                            </td>
 
                             <td class="px-6 py-4">
-                                @php $found = false; @endphp
-                                @foreach($people as $person1)
-                                    @if($person->created_by == $person1->id)
-                                        {{ $person1->first_name }}
-                                        @php $found = true; @endphp
-                                        @break
-                                    @endif
-                                @endforeach
-                                @if(!$found)
-                                    <i class="text-gray-400">Inconnu</i>
-                                @endif
+                                {{ $person->creator->name ?? 'Inconnu' }}
                             </td>
 
                             <td class="px-6 py-4">
                                 <a href="{{ route('people.show', $person->id) }}"
-                                   class="text-indigo-600 hover:underline">Voir</a>
+                                   class="text-indigo-600 hover:underline">
+                                   Voir
+                                </a>
                             </td>
                         </tr>
                     @endforeach
@@ -59,7 +51,7 @@
         </div>
 
         <div class="mt-6">
-            {{ $people->links() }} {{-- pagination --}}
+            {{ $people->links() }}
         </div>
     </div>
 </div>
