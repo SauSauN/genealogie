@@ -53,7 +53,7 @@
                    class="text-gray-600 hover:underline">⬅ Retour à la liste</a>
 
                 <button type="submit"
-                        class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 shadow">
+                    class="inline-block bg-indigo-600 hover:bg-green-700 text-black font-semibold px-4 py-2 rounded shadow">
                     Créer
                 </button>
             </div>
