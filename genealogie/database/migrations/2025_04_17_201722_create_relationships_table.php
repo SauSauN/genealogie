@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('relationships', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('created_by');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('birth_name')->nullable();
-            $table->string('middle_names')->nullable();
-            $table->date('date_of_birth')->nullable();
+            $table->unsignedBigInteger('parent_id');
+            $table->unsignedBigInteger('child_id');
             $table->timestamps();
 
             $table->index('created_by');
+            $table->index('parent_id');
+            $table->index('child_id');
         });
     }
 
